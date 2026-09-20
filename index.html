@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>微博收藏整理工具 · 社区站</title>
 <meta name="description" content="微博收藏整理工具官方社区 - 在线使用、使用教程、功能反馈、优化建议、闲聊灌水">
-<!-- Waline 样式（本地自托管，国内可直连） -->
-<link rel="stylesheet" href="./waline.css">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -77,8 +75,10 @@
   .forum-tab.active { background: #409eff; color: #fff; border-color: #409eff; }
   .forum-desc { text-align: center; color: #909399; font-size: 13px; margin-bottom: 16px; }
 
-  /* Waline 容器 */
-  #waline-wrap { background: #fff; border-radius: 10px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+  /* Twikoo 留言容器（4 分区各一个，切换显示） */
+  #twikoo-wrap { background: #fff; border-radius: 10px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+  .twikoo-panel { display: none; }
+  .twikoo-panel.active { display: block; }
 
   footer { background: #303133; color: #c0c4cc; padding: 26px 0; text-align: center; font-size: 13px; }
   footer a { color: #409eff; }
@@ -212,8 +212,11 @@
     </div>
     <p class="forum-desc" id="forum-desc">发布官方公告与版本更新说明</p>
 
-    <div id="waline-wrap">
-      <div id="waline"></div>
+    <div id="twikoo-wrap">
+      <div class="twikoo-panel active" id="tw-announcement"></div>
+      <div class="twikoo-panel" id="tw-feedback"></div>
+      <div class="twikoo-panel" id="tw-suggestion"></div>
+      <div class="twikoo-panel" id="tw-chat"></div>
     </div>
   </div>
 </section>
@@ -225,34 +228,24 @@
   </div>
 </footer>
 
-<!-- Waline 客户端（v2 UMD 本地自托管，全局变量 Waline） -->
-<script src="./waline.js"></script>
+<!-- Twikoo 客户端（本地自托管，GitHub Pages 分发） -->
+<script src="./twikoo.all.min.js"></script>
 <script>
   // ============ 配置区 ============
-  // Waline 服务端地址
-  const WALINE_SERVER_URL = 'https://instance.waline.infvar.com/site-mgm8lj';
-  // 敏感词列表（命中则阻止发布）—— 可自行增减
-  const SENSITIVE_WORDS = [
-    '台独','港独','藏独','疆独','法轮功','六四','天安门','习近平','毛泽东','共产党',
-    '色情','卖淫','嫖娼','约炮','一夜情','裸聊','成人视频','AV','番号',
-    '赌博','博彩','六合彩','时时彩','网上赌场',
-    '毒品','海洛因','冰毒','大麻','可卡因',
-    '恐怖袭击','杀人','自杀教程',
-    '诈骗','传销','非法集资','高利贷',
-    'fuck','shit','bitch','asshole','motherfucker'
-  ];
+  // 腾讯云 CloudBase 部署 Twikoo 后的环境 ID（形如 your-env-12345678）
+  // 部署方法见本文件底部注释，或看社区站部署指引
+  const TWIKOO_ENV_ID = 'weibo-community-d0frbg6u99b393b9';
   // ===============================
 
-  function containsSensitive(text) {
-    if (!text) return null;
-    const lower = text.toLowerCase();
-    for (const w of SENSITIVE_WORDS) {
-      if (lower.includes(w.toLowerCase())) return w;
-    }
-    return null;
-  }
+  // Twikoo 服务端自带「违禁词」拦截（管理面板 → 反垃圾 → 违禁词，粘贴 违禁词库.txt 内容即可）
 
-  let waline = null;
+  const inited = {};
+  const panels = {
+    '/announcement': 'tw-announcement',
+    '/feedback':     'tw-feedback',
+    '/suggestion':   'tw-suggestion',
+    '/chat':         'tw-chat'
+  };
   const forumDescs = {
     '/announcement': '发布官方公告与版本更新说明',
     '/feedback': '遇到 Bug 或功能异常请在此反馈',
@@ -260,52 +253,33 @@
     '/chat': '自由闲聊，注意文明发言'
   };
 
-  function initWaline(path) {
-    if (waline) waline.destroy();
+  function showTab(path) {
+    document.querySelectorAll('.twikoo-panel').forEach(p => p.classList.remove('active'));
+    const el = document.getElementById(panels[path]);
+    el.classList.add('active');
     document.getElementById('forum-desc').textContent = forumDescs[path] || '';
-    waline = Waline.init({
-      el: '#waline',
-      serverURL: WALINE_SERVER_URL,
-      path: path,
-      lang: 'zh-CN',
-      dark: false,
-      login: 'disable',        // 完全匿名：禁用登录，不收集任何账号信息
-      requiredMeta: [],        // 昵称/邮箱都不必填
-      avatar: 'retro',
-      emoji: ['https://cdn.jsdelivr.net/npm/@waline/emojis@1.2.0/weibo'],
-      wordLimit: 500,
-      imageUploader: false,    // 关闭图片上传，便于管理
-      reaction: false,
-      meta: [],                // 不显示昵称/邮箱/网址输入框
-    });
-  }
-
-  // 敏感词拦截：捕获阶段拦截发布按钮点击（不依赖 Waline 内部钩子，稳定有效）
-  document.getElementById('waline-wrap').addEventListener('click', function (e) {
-    const btn = e.target.closest('.wl-send');
-    if (!btn) return;
-    const wrap = document.getElementById('waline-wrap');
-    const editor = wrap.querySelector('.wl-editor');
-    const nick = wrap.querySelector('.wl-nick input, input.wl-nick');
-    const hit = containsSensitive((editor ? editor.innerText : '') + ' ' + (nick && nick.value ? nick.value : ''));
-    if (hit) {
-      e.preventDefault();
-      e.stopPropagation();
-      alert('发布失败：内容包含敏感词「' + hit + '」，请修改后重试。');
+    if (!inited[path]) {
+      inited[path] = true;
+      twikoo.init({
+        envId: TWIKOO_ENV_ID,
+        el: '#' + panels[path],
+        path: path,
+        lang: 'zh-CN'
+      });
     }
-  }, true);
+  }
 
   // 分区切换
   document.querySelectorAll('.forum-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       document.querySelectorAll('.forum-tab').forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
-      initWaline(tab.dataset.path);
+      showTab(tab.dataset.path);
     });
   });
 
   // 初始化默认分区
-  initWaline('/announcement');
+  showTab('/announcement');
 
   // 平滑滚动
   document.querySelectorAll('a[href^="#"]').forEach(a => {
@@ -314,6 +288,15 @@
       if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
     });
   });
+
+  /* ================= Twikoo 部署指引（腾讯云 CloudBase，国内直连） =================
+     1. 打开 https://twikoo.js.org/back-end.html 查看「腾讯云 CloudBase 部署」章节
+     2. 微信扫码注册/登录腾讯云 → 开通 CloudBase（创建"按量付费"环境，记下环境ID）
+     3. 按官方文档一键部署 twikoo 云函数，并开启「HTTP 访问服务」
+     4. 把环境 ID 填到上面的 TWIKOO_ENV_ID，把 index.html + twikoo.all.min.js 上传到 GitHub 仓库
+     5. 首次打开留言区 → 点评论区的小齿轮 → 设置管理员密码
+     6. 管理面板 → 反垃圾 → 违禁词：粘贴 违禁词库.txt 的全部内容（服务端拦截违规内容）
+  ================================================================================ */
 </script>
 
 </body>
