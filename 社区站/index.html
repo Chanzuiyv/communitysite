@@ -4,126 +4,87 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>微博收藏整理工具 · 社区站</title>
+<meta name="description" content="微博收藏整理工具官方社区 - 在线使用、使用教程、功能反馈、优化建议、闲聊灌水">
+<!-- Waline 样式 -->
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
-    background: #f5f7fa;
-    color: #303133;
-    line-height: 1.6;
+    background: #f5f7fa; color: #303133; line-height: 1.6;
   }
   a { color: #409eff; text-decoration: none; }
   a:hover { text-decoration: underline; }
-  .container { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+  .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
 
   /* 顶部导航 */
-  .navbar {
-    position: sticky; top: 0; z-index: 100;
-    background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,.08);
-  }
-  .navbar-inner {
-    max-width: 960px; margin: 0 auto; padding: 14px 20px;
-    display: flex; align-items: center; justify-content: space-between;
-  }
+  .navbar { position: sticky; top: 0; z-index: 100; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,.08); }
+  .navbar-inner { max-width: 1000px; margin: 0 auto; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; }
   .logo { font-size: 18px; font-weight: 700; color: #409eff; }
   .nav-links { display: flex; gap: 20px; font-size: 14px; }
   .nav-links a { color: #606266; }
 
   /* Hero */
-  .hero {
-    background: linear-gradient(135deg, #409eff 0%, #66b1ff 100%);
-    color: #fff; padding: 70px 0 60px; text-align: center;
-  }
-  .hero h1 { font-size: 36px; margin-bottom: 14px; }
-  .hero p { font-size: 16px; opacity: .92; margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto; }
-  .btn-group { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
-  .btn {
-    display: inline-block; padding: 12px 28px; border-radius: 6px;
-    font-size: 15px; font-weight: 600; cursor: pointer; border: none;
-    transition: all .2s; text-decoration: none;
-  }
+  .hero { background: linear-gradient(135deg, #409eff 0%, #66b1ff 100%); color: #fff; padding: 60px 0 50px; text-align: center; }
+  .hero h1 { font-size: 34px; margin-bottom: 12px; }
+  .hero p { font-size: 15px; opacity: .92; margin-bottom: 24px; max-width: 620px; margin-left: auto; margin-right: auto; }
+  .btn-group { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn { display: inline-block; padding: 11px 26px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: all .2s; text-decoration: none; }
   .btn-primary { background: #fff; color: #409eff; }
   .btn-primary:hover { background: #ecf5ff; text-decoration: none; }
   .btn-outline { background: transparent; color: #fff; border: 2px solid #fff; }
   .btn-outline:hover { background: rgba(255,255,255,.15); text-decoration: none; }
 
-  /* 区块通用 */
-  section { padding: 50px 0; }
-  section h2 {
-    font-size: 26px; text-align: center; margin-bottom: 10px; color: #303133;
-  }
-  .section-sub { text-align: center; color: #909399; margin-bottom: 36px; font-size: 14px; }
+  section { padding: 44px 0; }
+  section h2 { font-size: 24px; text-align: center; margin-bottom: 8px; }
+  .section-sub { text-align: center; color: #909399; margin-bottom: 28px; font-size: 13px; }
 
-  /* 功能卡片 */
-  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
-  .feature-card {
-    background: #fff; border-radius: 10px; padding: 24px;
-    box-shadow: 0 2px 12px rgba(0,0,0,.06); transition: transform .2s;
-  }
-  .feature-card:hover { transform: translateY(-4px); }
-  .feature-icon { font-size: 32px; margin-bottom: 12px; }
-  .feature-card h3 { font-size: 17px; margin-bottom: 8px; color: #303133; }
-  .feature-card p { font-size: 13px; color: #606266; }
+  /* 公告栏 */
+  .notice { background: #fff; border-radius: 10px; padding: 20px 24px; box-shadow: 0 2px 12px rgba(0,0,0,.06); border-left: 4px solid #409eff; }
+  .notice h3 { font-size: 16px; margin-bottom: 10px; color: #409eff; }
+  .notice-item { padding: 8px 0; border-bottom: 1px dashed #ebeef5; font-size: 14px; color: #606266; }
+  .notice-item:last-child { border-bottom: none; }
+  .notice-tag { display: inline-block; background: #409eff; color: #fff; font-size: 11px; padding: 1px 8px; border-radius: 3px; margin-right: 8px; }
+  .notice-tag.update { background: #67c23a; }
+  .notice-tag.warn { background: #e6a23c; }
 
-  /* 步骤 */
-  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; counter-reset: step; }
-  .step-card {
-    background: #fff; border-radius: 10px; padding: 24px;
-    box-shadow: 0 2px 12px rgba(0,0,0,.06); position: relative;
-  }
-  .step-num {
-    width: 36px; height: 36px; border-radius: 50%;
-    background: #409eff; color: #fff; font-weight: 700;
-    display: flex; align-items: center; justify-content: center;
-    margin-bottom: 14px; font-size: 16px;
-  }
-  .step-card h3 { font-size: 16px; margin-bottom: 8px; }
-  .step-card p { font-size: 13px; color: #606266; }
-  .step-card code { background: #f5f7fa; padding: 2px 6px; border-radius: 3px; font-size: 12px; color: #e6a23c; }
+  /* 获取卡片 */
+  .download-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .dl-card { background: #fff; border-radius: 10px; padding: 22px; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+  .dl-card h3 { font-size: 17px; margin-bottom: 6px; }
+  .dl-version { font-size: 12px; color: #909399; margin-bottom: 10px; }
+  .dl-desc { font-size: 13px; color: #606266; margin-bottom: 14px; min-height: 40px; }
+  .dl-btn { display: block; text-align: center; padding: 10px; background: #409eff; color: #fff; border-radius: 6px; font-weight: 600; font-size: 14px; }
+  .dl-btn:hover { background: #66b1ff; text-decoration: none; }
+  .dl-btn.secondary { background: #67c23a; }
+  .dl-btn.secondary:hover { background: #85ce61; }
 
-  /* 教程 */
-  .tutorial { background: #fff; border-radius: 10px; padding: 30px; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
-  .tutorial h3 { font-size: 17px; margin: 20px 0 10px; color: #409eff; }
+  /* 使用说明 */
+  .tutorial { background: #fff; border-radius: 10px; padding: 28px; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+  .tutorial h3 { font-size: 16px; margin: 20px 0 10px; color: #409eff; }
   .tutorial h3:first-child { margin-top: 0; }
   .tutorial p, .tutorial li { font-size: 14px; color: #606266; }
   .tutorial ol, .tutorial ul { padding-left: 22px; margin: 8px 0; }
   .tutorial li { margin-bottom: 6px; }
   .tutorial code { background: #f5f7fa; padding: 2px 6px; border-radius: 3px; font-size: 13px; color: #e6a23c; }
-  .alert {
-    background: #fdf6ec; border-left: 4px solid #e6a23c;
-    padding: 12px 16px; border-radius: 4px; margin: 14px 0; font-size: 13px; color: #606266;
-  }
+  .alert { background: #fdf6ec; border-left: 4px solid #e6a23c; padding: 12px 16px; border-radius: 4px; margin: 14px 0; font-size: 13px; color: #606266; }
   .alert-success { background: #f0f9eb; border-color: #67c23a; }
 
-  /* 更新日志 */
-  .changelog { background: #fff; border-radius: 10px; padding: 30px; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
-  .log-item { padding: 14px 0; border-bottom: 1px solid #ebeef5; }
-  .log-item:last-child { border-bottom: none; }
-  .log-version { font-weight: 700; color: #409eff; font-size: 15px; }
-  .log-date { color: #909399; font-size: 12px; margin-left: 8px; }
-  .log-item ul { padding-left: 22px; margin-top: 8px; }
-  .log-item li { font-size: 13px; color: #606266; margin-bottom: 4px; }
+  /* 留言区分区 Tab */
+  .forum-tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; justify-content: center; }
+  .forum-tab { padding: 8px 18px; border-radius: 20px; background: #fff; border: 1px solid #dcdfe6; cursor: pointer; font-size: 14px; color: #606266; transition: all .2s; }
+  .forum-tab:hover { border-color: #409eff; color: #409eff; }
+  .forum-tab.active { background: #409eff; color: #fff; border-color: #409eff; }
+  .forum-desc { text-align: center; color: #909399; font-size: 13px; margin-bottom: 16px; }
 
-  /* FAQ */
-  .faq-item {
-    background: #fff; border-radius: 8px; margin-bottom: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,.05); overflow: hidden;
-  }
-  .faq-q {
-    padding: 16px 20px; cursor: pointer; font-weight: 600; font-size: 14px;
-    display: flex; justify-content: space-between; align-items: center;
-  }
-  .faq-q::after { content: '+'; font-size: 20px; color: #909399; transition: transform .2s; }
-  .faq-item.open .faq-q::after { transform: rotate(45deg); }
-  .faq-a { padding: 0 20px; max-height: 0; overflow: hidden; transition: max-height .3s ease, padding .3s ease; font-size: 13px; color: #606266; }
-  .faq-item.open .faq-a { padding: 0 20px 16px; max-height: 500px; }
+  /* Waline 容器 */
+  #waline-wrap { background: #fff; border-radius: 10px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
 
-  /* 页脚 */
-  footer { background: #303133; color: #c0c4cc; padding: 30px 0; text-align: center; font-size: 13px; }
+  footer { background: #303133; color: #c0c4cc; padding: 26px 0; text-align: center; font-size: 13px; }
   footer a { color: #409eff; }
 
   @media (max-width: 600px) {
-    .hero h1 { font-size: 26px; }
+    .hero h1 { font-size: 24px; }
     .nav-links { display: none; }
   }
 </style>
@@ -134,11 +95,10 @@
   <div class="navbar-inner">
     <div class="logo">📋 微博收藏整理工具</div>
     <div class="nav-links">
-      <a href="#features">功能</a>
-      <a href="#quickstart">快速开始</a>
-      <a href="#tutorial">使用教程</a>
-      <a href="#changelog">更新日志</a>
-      <a href="#faq">常见问题</a>
+      <a href="#notice">公告</a>
+      <a href="#download">获取工具</a>
+      <a href="#tutorial">教程</a>
+      <a href="#forum">留言区</a>
     </div>
   </div>
 </nav>
@@ -146,192 +106,114 @@
 <section class="hero">
   <div class="container">
     <h1>📋 微博收藏整理工具</h1>
-    <p>专为内容组打造的微博数据管理系统 —— 艺人/年份维度管理微博与评论，支持图片视频、链接失效检测、自动抓取正文、数据报告导出。纯网页单文件，Windows / Mac 通用，数据只存在你自己的电脑。</p>
+    <p>通用微博收藏夹 —— 存任何人的微博，按艺人/年份分类管理，支持图片视频、链接失效检测、自动抓取正文。纯网页应用，Windows / Mac / 手机通用，数据只存在你自己的设备里。</p>
     <div class="btn-group">
-      <a class="btn btn-primary" href="https://raw.githubusercontent.com/你的用户名/你的仓库/main/index.html" download="index.html">⬇️ 下载工具</a>
-      <a class="btn btn-outline" href="#quickstart">🚀 快速开始</a>
+      <a class="btn btn-primary" href="https://chanzuiyv.github.io/weibo/" target="_blank">🚀 在线使用</a>
+      <a class="btn btn-outline" href="#forum">💬 去留言</a>
     </div>
   </div>
 </section>
 
-<section id="features">
+<!-- 公告栏 -->
+<section id="notice">
   <div class="container">
-    <h2>✨ 核心功能</h2>
-    <p class="section-sub">从收藏整理到数据报告，一站式搞定</p>
-    <div class="features">
-      <div class="feature-card">
-        <div class="feature-icon">👤</div>
-        <h3>艺人 / 年份管理</h3>
-        <p>按艺人、年份组织微博数据，多账号登录，数据相互隔离，支持数据导入导出。</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🖼️</div>
-        <h3>图片 / 视频管理</h3>
-        <p>微博配图与视频自动识别，支持批量上传、标记缺图、图频确认，图片防盗链自动处理。</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🔗</div>
-        <h3>链接失效检测</h3>
-        <p>「只存链接」模式自动检测微博是否失效，自动抓取正文与图片，红框标记已删除内容。</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">💬</div>
-        <h3>评论管理</h3>
-        <p>区分艺人本人评论与粉丝评论，树形回复结构，支持评论编辑、删除、批量操作。</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">📊</div>
-        <h3>数据报告</h3>
-        <p>一键生成年度数据报告，包含微博数量、图片统计、评论分析等可视化内容。</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🔒</div>
-        <h3>隐私安全</h3>
-        <p>纯前端单文件，数据存储在你本地浏览器（IndexedDB）或本地文件夹，不上传任何服务器。</p>
-      </div>
+    <h2>📢 公告栏</h2>
+    <p class="section-sub">最新动态与重要通知</p>
+    <div class="notice">
+      <div class="notice-item"><span class="notice-tag update">更新</span><b>v2.1 通用版已发布</b> —— 支持自定义艺人目录、全局搜索艺人、风险告知书强制确认。<span style="color:#909399;font-size:12px;">2026-09-20</span></div>
+      <div class="notice-item"><span class="notice-tag">公告</span>社区站已上线，欢迎在下方留言区反馈功能问题与优化建议。<span style="color:#909399;font-size:12px;">2026-09-20</span></div>
+      <div class="notice-item"><span class="notice-tag warn">提醒</span>本工具仅供个人收藏整理使用，请勿批量爬取或商用，数据版权归原作者所有。<span style="color:#909399;font-size:12px;">2026-09-20</span></div>
     </div>
   </div>
 </section>
 
-<section id="quickstart" style="background:#fff;">
+<!-- 获取工具 -->
+<section id="download" style="background:#fff;">
   <div class="container">
-    <h2>🚀 快速开始</h2>
-    <p class="section-sub">三步上手，零安装也能用基础功能</p>
-    <div class="steps">
-      <div class="step-card">
-        <div class="step-num">1</div>
-        <h3>下载工具</h3>
-        <p>点击上方「下载工具」按钮，得到一个 <code>index.html</code> 文件。</p>
+    <h2>🚀 获取工具</h2>
+    <p class="section-sub">手机电脑通用，打开即用，无需下载安装</p>
+    <div class="download-grid">
+      <div class="dl-card">
+        <h3>💻 在线使用（推荐）</h3>
+        <div class="dl-version">v2.1 · 最新版</div>
+        <div class="dl-desc">直接打开工具网址使用，永远自动保持最新版本，数据保存在你自己浏览器中。</div>
+        <a class="dl-btn" href="https://chanzuiyv.github.io/weibo/" target="_blank">立即打开工具</a>
       </div>
-      <div class="step-card">
-        <div class="step-num">2</div>
-        <h3>双击打开</h3>
-        <p>直接双击 <code>index.html</code>，用浏览器打开即可使用。图片视频自动显示。</p>
+      <div class="dl-card">
+        <h3>🐒 油猴脚本（可选）</h3>
+        <div class="dl-version">v1.0 · 自动检测通道</div>
+        <div class="dl-desc">无需 Python。装好 Tampermonkey/ScriptCat 扩展后，点下面按钮按提示一键安装即可。</div>
+        <a class="dl-btn secondary" href="https://raw.githubusercontent.com/ChanZuiyv/weibo/main/微博整理助手.user.js" target="_blank">一键安装脚本</a>
       </div>
-      <div class="step-card">
-        <div class="step-num">3</div>
-        <h3>配置通道（可选）</h3>
-        <p>想要「只存链接」自动检测/抓取？在 ④设置页填入社区提供的代理地址，或部署自己的 Cloudflare Worker。</p>
+      <div class="dl-card">
+        <h3>🐍 本地代理（可选）</h3>
+        <div class="dl-version">含 Windows / Mac 启动器</div>
+        <div class="dl-desc">有 Python 的用户可选，双击启动后填地址即可全自动。</div>
+        <a class="dl-btn secondary" href="https://raw.githubusercontent.com/ChanZuiyv/weibo/main/weibo_proxy.py" download="weibo_proxy.py">下载代理</a>
       </div>
     </div>
-    <div class="alert alert-success" style="margin-top:24px;">
-      💡 <b>零安装即可使用基础功能</b>：双击 index.html 打开，图片/视频自动显示，「完整保存」手贴模式全功能可用。只有「只存链接」的自动检测/抓取需要配置代理通道。
+    <div class="alert alert-success" style="margin-top:20px;">
+      💡 <b>打开网址即用，零安装</b>：图片/视频自动显示，微博增删改查全功能可用。只有「只存链接」的自动检测/抓取需要配置通道（油猴脚本或 Cloudflare Worker）。
     </div>
   </div>
 </section>
 
+<!-- 使用说明 -->
 <section id="tutorial">
   <div class="container">
-    <h2>📖 使用教程</h2>
-    <p class="section-sub">从导入数据到导出报告的完整流程</p>
+    <h2>📖 使用说明</h2>
+    <p class="section-sub">快速上手</p>
     <div class="tutorial">
-      <h3>1. 注册与登录</h3>
+      <h3>1. 打开工具</h3>
       <ol>
-        <li>打开工具后，点击「注册」创建账号（账号密码仅存在你本地浏览器）。</li>
-        <li>登录后选择「艺人」与「年份」，进入工作区。</li>
+        <li>点击「<b>立即打开工具</b>」，或直接访问 <code>https://chanzuiyv.github.io/weibo/</code>（推荐 Chrome / Edge，手机浏览器也可用）。</li>
+        <li>建议把网址收藏/添加到主屏幕，方便下次打开。</li>
       </ol>
 
-      <h3>2. 导入数据</h3>
+      <h3>2. 注册与登录</h3>
       <ol>
-        <li>点击左侧「①数据导入」。</li>
-        <li>选择包含微博/评论 xlsx 文件的文件夹（Chrome/Edge 支持一键选文件夹，其他浏览器可逐个选文件）。</li>
-        <li>工具自动解析并导入数据，可在 ②③ 页查看。</li>
+        <li>首次打开需阅读并同意「风险告知书」（必须确认才能进入）。</li>
+        <li>点击「注册」创建账号（账号密码仅存在你本地浏览器，不上传）。</li>
+        <li>登录后可<b>新建艺人目录</b>，选择年份进入工作区。</li>
       </ol>
 
-      <h3>3. 管理微博</h3>
+      <h3>3. 添加微博</h3>
       <ol>
-        <li>「②微博整理」：编辑文案、上传图片/视频、标记缺图、删除微博。</li>
-        <li>「③评论整理」：管理评论，区分艺人本人评论与粉丝评论。</li>
-        <li>支持「只存链接」模式：粘贴微博链接，自动检测存活并抓取正文/图片。</li>
+        <li>「②微博整理」→「添加微博」，手动填写文案、上传图片/视频。</li>
+        <li>或用「只存链接」模式：粘贴微博链接，自动检测存活并抓取正文/图片（需配置通道）。</li>
       </ol>
 
       <h3>4. 配置自动检测通道（可选）</h3>
-      <ol>
-        <li>进入「④设置」→「外链与检测通道」。</li>
-        <li>三选一：
-          <ul>
-            <li><b>油猴脚本</b>：装 Tampermonkey 扩展 + 粘贴脚本，全自动，无需 Python。</li>
-            <li><b>Cloudflare Worker</b>：部署一次，对方零安装全自动（推荐发给他人用）。</li>
-            <li><b>本地代理</b>：装 Python 后双击启动器，填 <code>http://127.0.0.1:8787</code>。</li>
-          </ul>
-        </li>
-        <li>填好地址后点「保存」→「测试连通」。</li>
-      </ol>
-
-      <h3>5. 导出报告</h3>
-      <ol>
-        <li>整理完成后，点击「⑥数据报告」。</li>
-        <li>选择艺人和年份，生成可视化报告。</li>
-        <li>可导出为 HTML 或 Excel。</li>
-      </ol>
+      <p>三选一，在工具「④设置 → 外链与检测通道」中配置：</p>
+      <ul>
+        <li><b>油猴脚本</b>（推荐）：装 Tampermonkey 扩展 + 一键安装脚本，无需 Python，电脑端全自动。</li>
+        <li><b>Cloudflare Worker</b>：部署一次，手机也能全自动（工具设置页可一键复制代码）。</li>
+        <li><b>本地代理</b>：装 Python 后双击启动器，填 <code>http://127.0.0.1:8787</code>。</li>
+      </ul>
 
       <div class="alert">
-        ⚠️ <b>注意</b>：数据存储在你本地浏览器（IndexedDB）。<b>清除浏览器数据会丢失所有内容</b>，建议定期使用「导出数据」功能备份。
+        ⚠️ <b>数据安全提醒</b>：数据存储在你本地浏览器中。<b>清除浏览器数据会丢失所有内容</b>，建议定期使用「导出数据」功能备份。工具不会上传任何数据到服务器。
       </div>
     </div>
   </div>
 </section>
 
-<section id="changelog" style="background:#fff;">
+<!-- 留言区 -->
+<section id="forum" style="background:#fff;">
   <div class="container">
-    <h2>📝 更新日志</h2>
-    <p class="section-sub">版本迭代记录</p>
-    <div class="changelog">
-      <div class="log-item">
-        <div><span class="log-version">v2.0</span><span class="log-date">2026-09</span></div>
-        <ul>
-          <li>✨ 重构为单文件 Vue3 应用，数据存储迁移到 IndexedDB</li>
-          <li>🖼️ 图片防盗链自动处理（no-referrer），双击打开即可显示图片</li>
-          <li>🔗 新增「只存链接」模式：自动检测微博存活、抓取正文与图片</li>
-          <li>🌐 新增外链检测通道：油猴脚本 / Cloudflare Worker / 本地代理 三选一</li>
-          <li>📱 适配 GitHub Pages 部署，支持跨浏览器使用</li>
-          <li>📜 新增首次使用风险告知书</li>
-        </ul>
-      </div>
-      <div class="log-item">
-        <div><span class="log-version">v1.0</span><span class="log-date">2025</span></div>
-        <ul>
-          <li>🎉 初始版本：艺人/年份维度的微博与评论管理</li>
-          <li>📊 支持数据导入导出与年度报告生成</li>
-        </ul>
-      </div>
+    <h2>💬 留言区</h2>
+    <p class="section-sub">纯匿名发布（无登录） · 支持楼中楼回复 · 敏感词自动拦截</p>
+
+    <div class="forum-tabs">
+      <div class="forum-tab active" data-path="/announcement">📢 公告区</div>
+      <div class="forum-tab" data-path="/feedback">🐛 功能反馈</div>
+      <div class="forum-tab" data-path="/suggestion">💡 优化建议</div>
+      <div class="forum-tab" data-path="/chat">💬 闲聊灌水</div>
     </div>
-  </div>
-</section>
+    <p class="forum-desc" id="forum-desc">发布官方公告与版本更新说明</p>
 
-<section id="faq">
-  <div class="container">
-    <h2>❓ 常见问题</h2>
-    <p class="section-sub">你可能想知道的</p>
-
-    <div class="faq-item">
-      <div class="faq-q">数据存在哪里？安全吗？</div>
-      <div class="faq-a">数据存储在你本地浏览器的 IndexedDB 中，或你选择的本地文件夹。<b>不会上传到任何服务器</b>，完全私密。但请注意：清除浏览器数据会丢失内容，建议定期导出备份。</div>
-    </div>
-
-    <div class="faq-item">
-      <div class="faq-q">需要装 Python 吗？</div>
-      <div class="faq-a">不需要。基础功能（图片显示、微博/评论管理）零安装即可使用。只有「只存链接」的自动检测/抓取需要配置通道，可选油猴脚本（无需 Python）或 Cloudflare Worker（对方零安装）。</div>
-    </div>
-
-    <div class="faq-item">
-      <div class="faq-q">Mac 能用吗？</div>
-      <div class="faq-a">完全可以。工具是纯网页单文件，Windows / Mac / Linux 通用。如果要本地代理，Mac 用 <code>python3 weibo_proxy.py</code> 或双击 <code>启动代理.command</code>。</div>
-    </div>
-
-    <div class="faq-item">
-      <div class="faq-q">图片显示不出来怎么办？</div>
-      <div class="faq-a">确保用双击 index.html 的方式打开（file:// 协议），或配置了有效的代理通道。如果个别图片仍不显示，可能是原图已被微博删除（外链永久失效）。</div>
-    </div>
-
-    <div class="faq-item">
-      <div class="faq-q">怎么分享给同事用？</div>
-      <div class="faq-a">把 index.html 文件发给对方即可。如果对方需要全自动检测功能，建议你先部署一个 Cloudflare Worker，把 Worker 地址告诉对方填进 ④设置页。对方不用装 Python、不用装扩展。</div>
-    </div>
-
-    <div class="faq-item">
-      <div class="faq-q">支持哪些浏览器？</div>
-      <div class="faq-a">推荐使用 Chrome、Edge、360、QQ、搜狗等 Chromium 内核浏览器（全功能支持）。Firefox、Safari 可使用核心功能，但批量导入/导出文件夹功能受限。</div>
+    <div id="waline-wrap">
+      <div id="waline"></div>
     </div>
   </div>
 </section>
@@ -339,17 +221,92 @@
 <footer>
   <div class="container">
     <p>📋 微博收藏整理工具 · 社区站</p>
-    <p style="margin-top:8px;">本工具仅供学习交流使用 · 数据版权归原作者所有 · 请遵守相关法律法规</p>
+    <p style="margin-top:8px;">本工具仅供个人收藏整理使用 · 数据版权归原作者所有 · 请遵守相关法律法规</p>
   </div>
 </footer>
 
+<!-- Waline 客户端 -->
+<script src="https://unpkg.com/@waline/client@v3/dist/waline.js"></script>
 <script>
-  // FAQ 展开/收起
-  document.querySelectorAll('.faq-item').forEach(item => {
-    item.querySelector('.faq-q').addEventListener('click', () => {
-      item.classList.toggle('open');
+  // ============ 配置区 ============
+  // Waline 服务端地址
+  const WALINE_SERVER_URL = 'https://instance.waline.infvar.com/site-mgm8lj';
+  // 敏感词列表（命中则阻止发布）—— 可自行增减
+  const SENSITIVE_WORDS = [
+    '台独','港独','藏独','疆独','法轮功','六四','天安门','习近平','毛泽东','共产党',
+    '色情','卖淫','嫖娼','约炮','一夜情','裸聊','成人视频','AV','番号',
+    '赌博','博彩','六合彩','时时彩','网上赌场',
+    '毒品','海洛因','冰毒','大麻','可卡因',
+    '恐怖袭击','杀人','自杀教程',
+    '诈骗','传销','非法集资','高利贷',
+    'fuck','shit','bitch','asshole','motherfucker'
+  ];
+  // ===============================
+
+  function containsSensitive(text) {
+    if (!text) return null;
+    const lower = text.toLowerCase();
+    for (const w of SENSITIVE_WORDS) {
+      if (lower.includes(w.toLowerCase())) return w;
+    }
+    return null;
+  }
+
+  let waline = null;
+  const forumDescs = {
+    '/announcement': '发布官方公告与版本更新说明',
+    '/feedback': '遇到 Bug 或功能异常请在此反馈',
+    '/suggestion': '提出你想要的新功能或优化方向',
+    '/chat': '自由闲聊，注意文明发言'
+  };
+
+  function initWaline(path) {
+    if (waline) waline.destroy();
+    document.getElementById('forum-desc').textContent = forumDescs[path] || '';
+    waline = Waline.init({
+      el: '#waline',
+      serverURL: WALINE_SERVER_URL,
+      path: path,
+      lang: 'zh-CN',
+      dark: false,
+      login: 'disable',        // 完全匿名：禁用登录，不收集任何账号信息
+      requiredMeta: [],        // 昵称/邮箱都不必填
+      avatar: 'retro',
+      emoji: ['https://unpkg.com/@waline/emojis@1.2.0/weibo'],
+      wordLimit: 500,
+      imageUploader: false,    // 关闭图片上传，便于管理
+      reaction: false,
+      meta: [],                // 不显示昵称/邮箱/网址输入框
+    });
+  }
+
+  // 敏感词拦截：捕获阶段拦截发布按钮点击（不依赖 Waline 内部钩子，稳定有效）
+  document.getElementById('waline-wrap').addEventListener('click', function (e) {
+    const btn = e.target.closest('.wl-send');
+    if (!btn) return;
+    const wrap = document.getElementById('waline-wrap');
+    const editor = wrap.querySelector('.wl-editor');
+    const nick = wrap.querySelector('.wl-nick input, input.wl-nick');
+    const hit = containsSensitive((editor ? editor.innerText : '') + ' ' + (nick && nick.value ? nick.value : ''));
+    if (hit) {
+      e.preventDefault();
+      e.stopPropagation();
+      alert('发布失败：内容包含敏感词「' + hit + '」，请修改后重试。');
+    }
+  }, true);
+
+  // 分区切换
+  document.querySelectorAll('.forum-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.forum-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      initWaline(tab.dataset.path);
     });
   });
+
+  // 初始化默认分区
+  initWaline('/announcement');
+
   // 平滑滚动
   document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => {
