@@ -240,7 +240,15 @@
   // Twikoo 服务端自带「违禁词」拦截（管理面板 → 反垃圾 → 违禁词，粘贴 违禁词库.txt 内容即可）
 
   const inited = {};
+  // 分区容器（负责显示/隐藏，永远存在）
   const panels = {
+    '/announcement': 'tw-announcement',
+    '/feedback':     'tw-feedback',
+    '/suggestion':   'tw-suggestion',
+    '/chat':         'tw-chat'
+  };
+  // 挂载点（Twikoo 渲染时会替换掉这个内层 div，外层容器不受影响）
+  const mounts = {
     '/announcement': 'mt-announcement',
     '/feedback':     'mt-feedback',
     '/suggestion':   'mt-suggestion',
@@ -262,7 +270,7 @@
       inited[path] = true;
       twikoo.init({
         envId: TWIKOO_ENV_ID,
-        el: '#' + panels[path],
+        el: '#' + mounts[path],
         path: path,
         lang: 'zh-CN'
       });
