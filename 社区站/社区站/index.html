@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>微博收藏整理工具 · 社区站</title>
+<meta name="description" content="微博收藏整理工具官方社区 - 在线使用、使用教程、功能反馈、优化建议、闲聊灌水">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #f5f7fa; color: #303133; line-height: 1.6;
+  }
+  a { color: #409eff; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+
+  /* 顶部导航 */
+  .navbar { position: sticky; top: 0; z-index: 100; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,.08); }
+  .navbar-inner { max-width: 1000px; margin: 0 auto; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; }
+  .logo { font-size: 18px; font-weight: 700; color: #409eff; }
+  .nav-links { display: flex; gap: 20px; font-size: 14px; }
+  .nav-links a { color: #606266; }
+
+  /* Hero */
+  .hero { background: linear-gradient(135deg, #409eff 0%, #66b1ff 100%); color: #fff; padding: 60px 0 50px; text-align: center; }
+  .hero h1 { font-size: 34px; margin-bottom: 12px; }
+  .hero p { font-size: 15px; opacity: .92; margin-bottom: 24px; max-width: 620px; margin-left: auto; margin-right: auto; }
+  .btn-group { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn { display: inline-block; padding: 11px 26px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: all .2s; text-decoration: none; }
+  .btn-primary { background: #fff; color: #409eff; }
+  .btn-primary:hover { background: #ecf5ff; text-decoration: none; }
+  .btn-outline { background: transparent; color: #fff; border: 2px solid #fff; }
+  .btn-outline:hover { background: rgba(255,255,255,.15); text-decoration: none; }
+
+  section { padding: 44px 0; }
+  section h2 { font-size: 24px; text-align: center; margin-bottom: 8px; }
+  .section-sub { text-align: center; color: #909399; margin-bottom: 28px; font-size: 13px; }
+
+  /* 公告栏 */
+  .notice { background: #fff; border-radius: 10px; padding: 20px 24px; box-shadow: 0 2px 12px rgba(0,0,0,.06); border-left: 4px solid #409eff; }
+  .notice h3 { font-size: 16px; margin-bottom: 10px; color: #409eff; }
+  .notice-item { padding: 8px 0; border-bottom: 1px dashed #ebeef5; font-size: 14px; color: #606266; }
+  .notice-item:last-child { border-bottom: none; }
+  .notice-tag { display: inline-block; background: #409eff; color: #fff; font-size: 11px; padding: 1px 8px; border-radius: 3px; margin-right: 8px; }
+  .notice-tag.update { background: #67c23a; }
+  .notice-tag.warn { background: #e6a23c; }
+
+  /* 获取卡片 */
+  .download-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .dl-card { background: #fff; border-radius: 10px; padding: 22px; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+  .dl-card h3 { font-size: 17px; margin-bottom: 6px; }
+  .dl-version { font-size: 12px; color: #909399; margin-bottom: 10px; }
+  .dl-desc { font-size: 13px; color: #606266; margin-bottom: 14px; min-height: 40px; }
+  .dl-btn { display: block; text-align: center; padding: 10px; background: #409eff; color: #fff; border-radius: 6px; font-weight: 600; font-size: 14px; }
+  .dl-btn:hover { background: #66b1ff; text-decoration: none; }
+  .dl-btn.secondary { background: #67c23a; }
+  .dl-btn.secondary:hover { background: #85ce61; }
+
+  /* 使用说明 */
+  .tutorial { background: #fff; border-radius: 10px; padding: 28px; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+  .tutorial h3 { font-size: 16px; margin: 20px 0 10px; color: #409eff; }
+  .tutorial h3:first-child { margin-top: 0; }
+  .tutorial p, .tutorial li { font-size: 14px; color: #606266; }
+  .tutorial ol, .tutorial ul { padding-left: 22px; margin: 8px 0; }
+  .tutorial li { margin-bottom: 6px; }
+  .tutorial code { background: #f5f7fa; padding: 2px 6px; border-radius: 3px; font-size: 13px; color: #e6a23c; }
+  .alert { background: #fdf6ec; border-left: 4px solid #e6a23c; padding: 12px 16px; border-radius: 4px; margin: 14px 0; font-size: 13px; color: #606266; }
+  .alert-success { background: #f0f9eb; border-color: #67c23a; }
+
+  /* 留言区分区 Tab */
+  .forum-tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; justify-content: center; }
+  .forum-tab { padding: 8px 18px; border-radius: 20px; background: #fff; border: 1px solid #dcdfe6; cursor: pointer; font-size: 14px; color: #606266; transition: all .2s; }
+  .forum-tab:hover { border-color: #409eff; color: #409eff; }
+  .forum-tab.active { background: #409eff; color: #fff; border-color: #409eff; }
+  .forum-desc { text-align: center; color: #909399; font-size: 13px; margin-bottom: 16px; }
+
+  /* Twikoo 留言容器（4 分区各一个，切换显示） */
+  #twikoo-wrap { background: #fff; border-radius: 10px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+  .twikoo-panel { display: none; }
+  .twikoo-panel.active { display: block; }
+
+  footer { background: #303133; color: #c0c4cc; padding: 26px 0; text-align: center; font-size: 13px; }
+  footer a { color: #409eff; }
+
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 24px; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <div class="logo">📋 微博收藏整理工具</div>
+    <div class="nav-links">
+      <a href="#notice">公告</a>
+      <a href="#download">获取工具</a>
+      <a href="#tutorial">教程</a>
+      <a href="#forum">留言区</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <h1>📋 微博收藏整理工具</h1>
+    <p>通用微博收藏夹 —— 存任何人的微博，按艺人/年份分类管理，支持图片视频、链接失效检测、自动抓取正文。纯网页应用，Windows / Mac / 手机通用，数据只存在你自己的设备里。</p>
+    <div class="btn-group">
+      <a class="btn btn-primary" href="https://chanzuiyv.github.io/weibo/" target="_blank">🚀 在线使用</a>
+      <a class="btn btn-outline" href="#forum">💬 去留言</a>
+    </div>
+  </div>
+</section>
+
+<!-- 公告栏 -->
+<section id="notice">
+  <div class="container">
+    <h2>📢 公告栏</h2>
+    <p class="section-sub">最新动态与重要通知</p>
+    <div class="notice">
+      <div class="notice-item"><span class="notice-tag update">更新</span><b>v2.1 通用版已发布</b> —— 支持自定义艺人目录、全局搜索艺人、风险告知书强制确认。<span style="color:#909399;font-size:12px;">2026-09-20</span></div>
+      <div class="notice-item"><span class="notice-tag">公告</span>社区站已上线，欢迎在下方留言区反馈功能问题与优化建议。<span style="color:#909399;font-size:12px;">2026-09-20</span></div>
+      <div class="notice-item"><span class="notice-tag warn">提醒</span>本工具仅供个人收藏整理使用，请勿批量爬取或商用，数据版权归原作者所有。<span style="color:#909399;font-size:12px;">2026-09-20</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 获取工具 -->
+<section id="download" style="background:#fff;">
+  <div class="container">
+    <h2>🚀 获取工具</h2>
+    <p class="section-sub">手机电脑通用，打开即用，无需下载安装</p>
+    <div class="download-grid">
+      <div class="dl-card">
+        <h3>💻 在线使用（推荐）</h3>
+        <div class="dl-version">v2.1 · 最新版</div>
+        <div class="dl-desc">直接打开工具网址使用，永远自动保持最新版本，数据保存在你自己浏览器中。</div>
+        <a class="dl-btn" href="https://chanzuiyv.github.io/weibo/" target="_blank">立即打开工具</a>
+      </div>
+      <div class="dl-card">
+        <h3>🐒 油猴脚本（可选）</h3>
+        <div class="dl-version">v1.0 · 自动检测通道</div>
+        <div class="dl-desc">无需 Python。装好 Tampermonkey/ScriptCat 扩展后，点下面按钮按提示一键安装即可。</div>
+        <a class="dl-btn secondary" href="https://raw.githubusercontent.com/ChanZuiyv/weibo/main/微博整理助手.user.js" target="_blank">一键安装脚本</a>
+      </div>
+      <div class="dl-card">
+        <h3>🐍 本地代理（可选）</h3>
+        <div class="dl-version">含 Windows / Mac 启动器</div>
+        <div class="dl-desc">有 Python 的用户可选，双击启动后填地址即可全自动。</div>
+        <a class="dl-btn secondary" href="https://raw.githubusercontent.com/ChanZuiyv/weibo/main/weibo_proxy.py" download="weibo_proxy.py">下载代理</a>
+      </div>
+    </div>
+    <div class="alert alert-success" style="margin-top:20px;">
+      💡 <b>打开网址即用，零安装</b>：图片/视频自动显示，微博增删改查全功能可用。只有「只存链接」的自动检测/抓取需要配置通道（油猴脚本或 Cloudflare Worker）。
+    </div>
+  </div>
+</section>
+
+<!-- 使用说明 -->
+<section id="tutorial">
+  <div class="container">
+    <h2>📖 使用说明</h2>
+    <p class="section-sub">快速上手</p>
+    <div class="tutorial">
+      <h3>1. 打开工具</h3>
+      <ol>
+        <li>点击「<b>立即打开工具</b>」，或直接访问 <code>https://chanzuiyv.github.io/weibo/</code>（推荐 Chrome / Edge，手机浏览器也可用）。</li>
+        <li>建议把网址收藏/添加到主屏幕，方便下次打开。</li>
+      </ol>
+
+      <h3>2. 注册与登录</h3>
+      <ol>
+        <li>首次打开需阅读并同意「风险告知书」（必须确认才能进入）。</li>
+        <li>点击「注册」创建账号（账号密码仅存在你本地浏览器，不上传）。</li>
+        <li>登录后可<b>新建艺人目录</b>，选择年份进入工作区。</li>
+      </ol>
+
+      <h3>3. 添加微博</h3>
+      <ol>
+        <li>「②微博整理」→「添加微博」，手动填写文案、上传图片/视频。</li>
+        <li>或用「只存链接」模式：粘贴微博链接，自动检测存活并抓取正文/图片（需配置通道）。</li>
+      </ol>
+
+      <h3>4. 配置自动检测通道（可选）</h3>
+      <p>三选一，在工具「④设置 → 外链与检测通道」中配置：</p>
+      <ul>
+        <li><b>油猴脚本</b>（推荐）：装 Tampermonkey 扩展 + 一键安装脚本，无需 Python，电脑端全自动。</li>
+        <li><b>Cloudflare Worker</b>：部署一次，手机也能全自动（工具设置页可一键复制代码）。</li>
+        <li><b>本地代理</b>：装 Python 后双击启动器，填 <code>http://127.0.0.1:8787</code>。</li>
+      </ul>
+
+      <div class="alert">
+        ⚠️ <b>数据安全提醒</b>：数据存储在你本地浏览器中。<b>清除浏览器数据会丢失所有内容</b>，建议定期使用「导出数据」功能备份。工具不会上传任何数据到服务器。
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 留言区 -->
+<section id="forum" style="background:#fff;">
+  <div class="container">
+    <h2>💬 留言区</h2>
+    <p class="section-sub">纯匿名发布（无登录） · 支持楼中楼回复 · 敏感词自动拦截</p>
+
+    <div class="forum-tabs">
+      <div class="forum-tab active" data-path="/announcement">📢 公告区</div>
+      <div class="forum-tab" data-path="/feedback">🐛 功能反馈</div>
+      <div class="forum-tab" data-path="/suggestion">💡 优化建议</div>
+      <div class="forum-tab" data-path="/chat">💬 闲聊灌水</div>
+    </div>
+    <p class="forum-desc" id="forum-desc">发布官方公告与版本更新说明</p>
+
+    <div id="twikoo-wrap">
+      <div class="twikoo-panel active" id="tw-announcement"></div>
+      <div class="twikoo-panel" id="tw-feedback"></div>
+      <div class="twikoo-panel" id="tw-suggestion"></div>
+      <div class="twikoo-panel" id="tw-chat"></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>📋 微博收藏整理工具 · 社区站</p>
+    <p style="margin-top:8px;">本工具仅供个人收藏整理使用 · 数据版权归原作者所有 · 请遵守相关法律法规</p>
+  </div>
+</footer>
+
+<!-- Twikoo 客户端（本地自托管，GitHub Pages 分发） -->
+<script src="./twikoo.all.min.js"></script>
+<script>
+  // ============ 配置区 ============
+  // 腾讯云 CloudBase 部署 Twikoo 后的环境 ID（形如 your-env-12345678）
+  // 部署方法见本文件底部注释，或看社区站部署指引
+  const TWIKOO_ENV_ID = 'weibo-community-d0frbg6u99b393b9';
+  // ===============================
+
+  // Twikoo 服务端自带「违禁词」拦截（管理面板 → 反垃圾 → 违禁词，粘贴 违禁词库.txt 内容即可）
+
+  const inited = {};
+  const panels = {
+    '/announcement': 'tw-announcement',
+    '/feedback':     'tw-feedback',
+    '/suggestion':   'tw-suggestion',
+    '/chat':         'tw-chat'
+  };
+  const forumDescs = {
+    '/announcement': '发布官方公告与版本更新说明',
+    '/feedback': '遇到 Bug 或功能异常请在此反馈',
+    '/suggestion': '提出你想要的新功能或优化方向',
+    '/chat': '自由闲聊，注意文明发言'
+  };
+
+  function showTab(path) {
+    document.querySelectorAll('.twikoo-panel').forEach(p => p.classList.remove('active'));
+    const el = document.getElementById(panels[path]);
+    el.classList.add('active');
+    document.getElementById('forum-desc').textContent = forumDescs[path] || '';
+    if (!inited[path]) {
+      inited[path] = true;
+      twikoo.init({
+        envId: TWIKOO_ENV_ID,
+        el: '#' + panels[path],
+        path: path,
+        lang: 'zh-CN'
+      });
+    }
+  }
+
+  // 分区切换
+  document.querySelectorAll('.forum-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.forum-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      showTab(tab.dataset.path);
+    });
+  });
+
+  // 初始化默认分区
+  showTab('/announcement');
+
+  // 平滑滚动
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const t = document.querySelector(a.getAttribute('href'));
+      if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+    });
+  });
+
+  /* ================= Twikoo 部署指引（腾讯云 CloudBase，国内直连） =================
+     1. 打开 https://twikoo.js.org/back-end.html 查看「腾讯云 CloudBase 部署」章节
+     2. 微信扫码注册/登录腾讯云 → 开通 CloudBase（创建"按量付费"环境，记下环境ID）
+     3. 按官方文档一键部署 twikoo 云函数，并开启「HTTP 访问服务」
+     4. 把环境 ID 填到上面的 TWIKOO_ENV_ID，把 index.html + twikoo.all.min.js 上传到 GitHub 仓库
+     5. 首次打开留言区 → 点评论区的小齿轮 → 设置管理员密码
+     6. 管理面板 → 反垃圾 → 违禁词：粘贴 违禁词库.txt 的全部内容（服务端拦截违规内容）
+  ================================================================================ */
+</script>
+
+</body>
+</html>
