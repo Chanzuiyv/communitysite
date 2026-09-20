@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>微博收藏整理工具 · 社区站</title>
 <meta name="description" content="微博收藏整理工具官方社区 - 在线使用、使用教程、功能反馈、优化建议、闲聊灌水">
-<!-- Waline 样式 -->
-<link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css">
+<!-- Waline 样式（本地自托管，国内可直连） -->
+<link rel="stylesheet" href="./waline.css">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -225,8 +225,8 @@
   </div>
 </footer>
 
-<!-- Waline 客户端 -->
-<script src="https://unpkg.com/@waline/client@v3/dist/waline.js"></script>
+<!-- Waline 客户端（v2 UMD 本地自托管，全局变量 Waline） -->
+<script src="./waline.js"></script>
 <script>
   // ============ 配置区 ============
   // Waline 服务端地址
@@ -272,7 +272,7 @@
       login: 'disable',        // 完全匿名：禁用登录，不收集任何账号信息
       requiredMeta: [],        // 昵称/邮箱都不必填
       avatar: 'retro',
-      emoji: ['https://unpkg.com/@waline/emojis@1.2.0/weibo'],
+      emoji: ['https://cdn.jsdelivr.net/npm/@waline/emojis@1.2.0/weibo'],
       wordLimit: 500,
       imageUploader: false,    // 关闭图片上传，便于管理
       reaction: false,
