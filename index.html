@@ -96,6 +96,7 @@
     <div class="logo">📋 微博收藏整理工具</div>
     <div class="nav-links">
       <a href="#notice">公告</a>
+      <a href="#avatar-frame-submit">头像框</a>
       <a href="#download">获取工具</a>
       <a href="#tutorial">教程</a>
       <a href="#forum">留言区</a>
@@ -120,6 +121,7 @@
     <h2>📢 公告栏</h2>
     <p class="section-sub">最新动态与重要通知</p>
     <div class="notice">
+      <div class="notice-item"><span class="notice-tag update">更新</span><b>v2.3 头像框投稿通道开启 🎨</b> —— 工具内置 10 款系统头像框（彩虹、极光、落日、翡翠、金辉、冰蓝、暗夜、樱花、极简白、极简黑），同时开放社区投稿：你设计的头像框有机会被收录为官方头像框，所有用户都能用上。<a href="#avatar-frame-submit" style="color:#409eff;text-decoration:underline;">查看投稿规范 →</a><span style="color:#909399;font-size:12px;">2026-09-22</span></div>
       <div class="notice-item"><span class="notice-tag update">更新</span><b>v2.2 手机端全面升级 📱</b> —— 全新底部 Tab 栏导航、图片+视频并排缩略图（点图全屏看全部、点视频一键播放/全屏）、收藏夹/点赞/标签单独页面、整库备份支持系统分享、Dialog 全宽适配、UI 模式可切换（手机/电脑/自动三档）。腾讯云 SCF 代理默认集成，无需配置即可自动抓取微博正文与图片。<span style="color:#909399;font-size:12px;">2026-09-21</span></div>
       <div class="notice-item"><span class="notice-tag update">更新</span><b>v2.1 通用版已发布</b> —— 支持自定义艺人目录、全局搜索艺人、风险告知书强制确认。<span style="color:#909399;font-size:12px;">2026-09-20</span></div>
       <div class="notice-item"><span class="notice-tag">公告</span>社区站已上线，欢迎在下方留言区反馈功能问题与优化建议。<span style="color:#909399;font-size:12px;">2026-09-20</span></div>
@@ -155,6 +157,106 @@
     </div>
     <div class="alert alert-success" style="margin-top:20px;">
       💡 <b>打开网址即用，零安装零配置</b>：图片/视频自动显示，微博增删改查全功能可用。自动检测/自动抓取功能已<b>默认集成腾讯云 SCF 代理</b>，无需手动配置即可开箱即用。
+    </div>
+  </div>
+</section>
+
+<!-- 头像框投稿 -->
+<section id="avatar-frame-submit" style="background:#f0f9eb;">
+  <div class="container">
+    <h2>🎨 头像框投稿</h2>
+    <p class="section-sub">设计你的专属头像框，让所有用户都用上你的作品</p>
+    <div class="tutorial" style="border-left:4px solid #67c23a;">
+
+      <h3>📦 投稿是什么？</h3>
+      <p>工具内「个人中心 → 头像框」提供 10 款<b>系统默认头像框</b>（彩虹、极光、落日、翡翠、金辉、冰蓝、暗夜、樱花、极简白、极简黑）。本通道接受社区原创投稿，票数高的作品经开发者审核后会被<b>入库成为官方头像框</b>，全站所有用户都能在「头像框」选择页里选用。</p>
+
+      <h3>📐 文件要求（三选一）</h3>
+
+      <h4>① 渐变 / 纯色（最简单 · 文字投稿即可）</h4>
+      <ul>
+        <li>提交一句 <code>CSS background</code> 表达式</li>
+        <li>例： <code>linear-gradient(135deg,#667eea,#764ba2)</code> 或 <code>#ff6b9d</code> 或 <code>repeating-linear-gradient(45deg,#f0f0f0,#f0f0f0 10px,#e0e0e0 10px,#e0e0e0 20px)</code></li>
+        <li>仅接受 <code>linear-gradient</code> / <code>radial-gradient</code> / <code>repeating-*-gradient</code> / <code>#hex</code> / <code>rgba()</code> 等纯色或渐变表达式</li>
+      </ul>
+
+      <h4>② 图案 PNG（推荐 · 能做装饰性头像框）</h4>
+      <ul>
+        <li><b>尺寸</b>：220×220px（2 倍图，保证高清）</li>
+        <li><b>格式</b>：PNG（必须支持 alpha 透明通道）</li>
+        <li><b>中央透明</b>：直径 ≥ 208px 的圆形必须保持完全透明，不得遮挡头像</li>
+        <li><b>外圈装饰</b>：装饰宽度建议 3–10px，圆环形态，不得是方形</li>
+        <li><b>角外透明</b>：圆环以外区域必须完全透明（不要铺底色）</li>
+        <li><b>文件大小</b>：≤ 200KB</li>
+        <li><b>命名</b>：<code>frame-英文ID.png</code>（如 <code>frame-sakura.png</code>）</li>
+        <li>主题参考：花朵环绕、星点装饰、彩带、节庆元素、几何纹理等</li>
+      </ul>
+
+      <h4>③ SVG 矢量图（专业投稿）</h4>
+      <ul>
+        <li>单文件 SVG，<code>viewBox="0 0 220 220"</code></li>
+        <li>中央保持透明圆形（直径 ≥ 208px）</li>
+        <li>不得内嵌光栅图片 / 字体 / 外链资源</li>
+        <li>文件大小：≤ 100KB</li>
+        <li>命名：<code>frame-英文ID.svg</code></li>
+      </ul>
+
+      <h3>✏️ 内容规范（必须遵守）</h3>
+      <ul>
+        <li>须为<b>原创</b>，不得抄袭、搬运他人作品</li>
+        <li>不得含有：违法违规内容、艺人照片、明星肖像、品牌 logo、二维码、广告、外链</li>
+        <li>不得含有：可能引起争议的政治、宗教、歧视性符号</li>
+        <li>不得含有：恶意代码 / 脚本 / 数据 URI 形式的可执行内容</li>
+      </ul>
+
+      <h3>📨 投稿方式</h3>
+      <ul>
+        <li><b>方式一（推荐）</b>：到下方「💬 留言区」→「优化建议」分区发帖，附文字描述或图片文件，标题前缀写「头像框投稿」</li>
+        <li><b>方式二</b>：私发邮件至 <code>2720115869@qq.com</code>，主题格式：<code>头像框投稿-作品名-作者昵称</code></li>
+        <li>作者昵称可选填，不填则默认匿名</li>
+      </ul>
+
+      <h3>📤 投稿上传指南</h3>
+      <p>留言区评论框已支持<b>图片上传</b>（PNG / JPG / GIF / WebP），按下方说明操作即可。SVG 文件请用网盘方式（见文末）。</p>
+
+      <h4>📷 图片投稿（直接传到评论区）</h4>
+      <ol>
+        <li>在评论区输入框下方找到「图片」按钮（评论框右下角工具栏）</li>
+        <li>点「图片」→ 选本地 PNG/JPG/WebP 文件 → 等待自动上传</li>
+        <li>上传成功后图片会自动插入到评论正文</li>
+        <li>补充文字描述（如「作品名：xxx，作者：xxx」）→ 发布</li>
+      </ol>
+      <div class="alert">⚠️ <b>单图大小 ≤ 5MB</b>。评论区仅支持图片格式，<b>不支持 SVG / 任意文件</b>，请看下方「文件投稿」。</div>
+
+      <h4>📎 文件投稿（PNG / SVG / 备用方案）</h4>
+      <p>留言区评论框不支持任意文件上传，请用以下任一方式传文件，然后把<b>分享链接</b>贴到评论正文：</p>
+      <ul>
+        <li><b>蓝奏云</b>（推荐，国内速度快）：https://www.lanzoui.com/ 上传 100MB 以内文件，得到分享链接</li>
+        <li><b>奶牛快传</b>：https://cowtransfer.com/ 7 天有效</li>
+        <li><b>腾讯微云 / 百度网盘</b>：永久存储但提取码较繁琐</li>
+        <li><b>GitHub Gist</b>（适合 SVG 代码）：https://gist.github.com/ 贴 SVG 源码即可</li>
+      </ul>
+      <div class="alert alert-success">💡 <b>示例</b>：评论文案写「头像框投稿-樱花环-小橘子」，正文贴：<code>蓝奏云下载：https://xxx.lanzoui.com/xxx 提取码:1234</code></div>
+
+      <h3>🏆 评选流程</h3>
+      <ol>
+        <li>每周汇总一次投稿，候选作品在公告栏置顶公示</li>
+        <li>用户在「优化建议」分区对候选作品回复表态（👍 / 💬 评论）</li>
+        <li>得票高 + 合规的作品由开发者审核入库</li>
+        <li>下一版本工具更新时上线，所有用户在「头像框」选择页即可选用</li>
+        <li>入选作品会显示「作者：<昵称>」标签（作者可署名）</li>
+      </ol>
+
+      <h3>📋 投稿即同意</h3>
+      <ul>
+        <li>提交即视为<b>原创承诺</b>，如有侵权由投稿者自行负责</li>
+        <li>投稿作品一经入库，开发者保留最终上架 / 下架 / 微调（如压缩体积）的权利</li>
+        <li>投稿作品不向投稿者支付费用，为社区共建无偿贡献</li>
+      </ul>
+
+      <div class="alert" style="margin-top:18px;">
+        💡 <b>小提示</b>：第一次投稿建议先做简单渐变式试水（方式 ①），熟悉规范后再做图案 / SVG 复杂头像框。如有疑问，到「优化建议」分区提问即可。
+      </div>
     </div>
   </div>
 </section>
